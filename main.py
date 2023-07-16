@@ -1,4 +1,3 @@
-
 from environs import Env
 import requests
 
