@@ -24,10 +24,21 @@ def main():
             response = response.json()
             status = response.get('status')
             if status == 'found':
-                print(response['new_attempts'])
-                bot.send_message(
-                    chat_id=chat_id, text='Преподаватель проверил работу!'
-                )
+                new_attempt = response['new_attempts'][0]
+                if new_attempt['is_negative']:
+                    message = (
+                        f'У вас проверили работу "{new_attempt["lesson_title"]}"'
+                        '\nК сожалению, в работе нашлись ошибки.'
+                        f'\nСсылка на урок: {new_attempt["lesson_url"]}'
+                    )
+                else:
+                    message = (
+                        f'У вас проверили работу "{new_attempt["lesson_title"]}"'
+                        '\nПреподавателю все понравилось,'
+                        'можно приступать к следующему уроку!'
+                        f'\nСсылка на урок: {new_attempt["lesson_url"]}'
+                    )
+                bot.send_message(chat_id=chat_id, text=message)
             elif status == 'timeout':
                 timestamp = response['timestamp_to_request']
                 print('timeout')
