@@ -43,9 +43,8 @@ def main():
                 bot.send_message(chat_id=tg_chat_id, text=message)
             elif status == 'timeout':
                 timestamp = api_response['timestamp_to_request']
-                print('timeout')
             else:
-                print('unexpected status')
+                pass
         except requests.exceptions.ReadTimeout:
             pass
         except requests.exceptions.ConnectionError:
