@@ -23,6 +23,7 @@ def main():
             api_response = response.json()
             status = api_response.get('status')
             if status == 'found':
+                timestamp = api_response['last_attempt_timestamp']
                 new_attempt = api_response['new_attempts'][0]
                 if new_attempt['is_negative']:
                     message = dedent(
