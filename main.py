@@ -12,15 +12,12 @@ def main():
     tg_chat_id = env('TG_CHAT_ID')
     bot = telegram.Bot(token=telegram_token)
     headers = {'Authorization': f'Token {devman_token}'}
-    timestamp = ''
+    timestamp = None
     while True:
         try:
-            if not timestamp:
-                response = requests.get(url, headers=headers)
-            else:
-                params = {'timestamp': timestamp}
-                timestamp = ''
-                response = requests.get(url, headers=headers, params=params)
+            params = {'timestamp': timestamp}
+            timestamp = ''
+            response = requests.get(url, headers=headers, params=params)
             response = response.json()
             status = response.get('status')
             if status == 'found':
