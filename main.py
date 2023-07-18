@@ -9,7 +9,7 @@ def main():
     devman_token = env('DEVMAN_TOKEN')
     url = env('DEVMAN_URL')
     telegram_token = env('TELEGRAM_TOKEN')
-    chat_id = env('CHAT_ID')
+    tg_chat_id = env('TG_CHAT_ID')
     bot = telegram.Bot(token=telegram_token)
     headers = {'Authorization': f'Token {devman_token}'}
     timestamp = ''
@@ -38,7 +38,7 @@ def main():
                         'можно приступать к следующему уроку!'
                         f'\nСсылка на урок: {new_attempt["lesson_url"]}'
                     )
-                bot.send_message(chat_id=chat_id, text=message)
+                bot.send_message(chat_id=tg_chat_id, text=message)
             elif status == 'timeout':
                 timestamp = response['timestamp_to_request']
                 print('timeout')

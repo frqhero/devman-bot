@@ -6,7 +6,7 @@ In order the script to work please create `.env` file and specify these env vars
 `DEVMAN_TOKEN`  
 `DEVMAN_URL`  
 `TELEGRAM_TOKEN`  
-`CHAT_ID`
+`TG_CHAT_ID`
 
 ## Installation
 1. Clone `git clone ...`
