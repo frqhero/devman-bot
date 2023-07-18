@@ -18,10 +18,10 @@ def main():
             params = {'timestamp': timestamp}
             timestamp = ''
             response = requests.get(url, headers=headers, params=params)
-            response = response.json()
-            status = response.get('status')
+            api_response = response.json()
+            status = api_response.get('status')
             if status == 'found':
-                new_attempt = response['new_attempts'][0]
+                new_attempt = api_response['new_attempts'][0]
                 if new_attempt['is_negative']:
                     message = (
                         f'У вас проверили работу "{new_attempt["lesson_title"]}"'
@@ -37,7 +37,7 @@ def main():
                     )
                 bot.send_message(chat_id=tg_chat_id, text=message)
             elif status == 'timeout':
-                timestamp = response['timestamp_to_request']
+                timestamp = api_response['timestamp_to_request']
                 print('timeout')
             else:
                 print('unexpected status')
