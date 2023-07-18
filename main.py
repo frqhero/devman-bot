@@ -1,3 +1,5 @@
+from textwrap import dedent
+
 from environs import Env
 import requests
 import telegram
@@ -23,17 +25,19 @@ def main():
             if status == 'found':
                 new_attempt = api_response['new_attempts'][0]
                 if new_attempt['is_negative']:
-                    message = (
-                        f'У вас проверили работу "{new_attempt["lesson_title"]}"'
-                        '\nК сожалению, в работе нашлись ошибки.'
-                        f'\nСсылка на урок: {new_attempt["lesson_url"]}'
+                    message = dedent(
+                        f'''\
+                        У вас проверили работу "{new_attempt["lesson_title"]}" 
+                        К сожалению, в работе нашлись ошибки.
+                        Ссылка на урок: {new_attempt["lesson_url"]}'''
                     )
                 else:
-                    message = (
-                        f'У вас проверили работу "{new_attempt["lesson_title"]}"'
-                        '\nПреподавателю все понравилось,'
-                        'можно приступать к следующему уроку!'
-                        f'\nСсылка на урок: {new_attempt["lesson_url"]}'
+                    message = dedent(
+                        f'''\
+                        У вас проверили работу "{new_attempt["lesson_title"]}"
+                        Преподавателю все понравилось,
+                        можно приступать к следующему уроку!
+                        Ссылка на урок: {new_attempt["lesson_url"]}'''
                     )
                 bot.send_message(chat_id=tg_chat_id, text=message)
             elif status == 'timeout':
