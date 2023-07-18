@@ -1,4 +1,5 @@
 from textwrap import dedent
+from time import sleep
 
 from environs import Env
 import requests
@@ -48,7 +49,7 @@ def main():
         except requests.exceptions.ReadTimeout:
             pass
         except requests.exceptions.ConnectionError:
-            pass
+            sleep(60)
 
 
 if __name__ == '__main__':
