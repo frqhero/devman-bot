@@ -21,11 +21,11 @@ def main():
             params = {'timestamp': timestamp}
             timestamp = ''
             response = requests.get(url, headers=headers, params=params)
-            api_response = response.json()
-            status = api_response.get('status')
+            checks = response.json()
+            status = checks.get('status')
             if status == 'found':
-                timestamp = api_response['last_attempt_timestamp']
-                new_attempt = api_response['new_attempts'][0]
+                timestamp = checks['last_attempt_timestamp']
+                new_attempt = checks['new_attempts'][0]
                 if new_attempt['is_negative']:
                     message = dedent(
                         f'''\
@@ -43,7 +43,7 @@ def main():
                     )
                 bot.send_message(chat_id=tg_chat_id, text=message)
             elif status == 'timeout':
-                timestamp = api_response['timestamp_to_request']
+                timestamp = checks['timestamp_to_request']
             else:
                 pass
         except requests.exceptions.ReadTimeout:
