@@ -25,7 +25,7 @@ def main():
             checks = response.json()
             status = checks.get('status')
             if status == 'found':
-                logging.debug('hi')
+                logging.warning('hi')
                 timestamp = checks['last_attempt_timestamp']
                 new_attempt = checks['new_attempts'][0]
                 if new_attempt['is_negative']:
