@@ -1,6 +1,7 @@
 from textwrap import dedent
 from time import sleep
 import logging
+import traceback
 
 from environs import Env
 import requests
@@ -65,9 +66,9 @@ def main():
                 timestamp = checks['timestamp_to_request']
             else:
                 pass
-        except requests.exceptions.ReadTimeout:
-            pass
-        except requests.exceptions.ConnectionError:
+        except Exception:
+            exception_data = traceback.format_exc().splitlines()
+            bot.logger.warning(exception_data[-1])
             sleep(60)
 
 
