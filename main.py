@@ -7,6 +7,9 @@ import requests
 import telegram
 
 
+logging.basicConfig(level=logging.INFO)
+
+
 def main():
     env = Env()
     env.read_env()
@@ -19,13 +22,13 @@ def main():
     timestamp = None
     while True:
         try:
+            logging.info('The bot is starting...')
             params = {'timestamp': timestamp}
             timestamp = ''
             response = requests.get(url, headers=headers, params=params)
             checks = response.json()
             status = checks.get('status')
             if status == 'found':
-                logging.warning('hi')
                 timestamp = checks['last_attempt_timestamp']
                 new_attempt = checks['new_attempts'][0]
                 if new_attempt['is_negative']:
@@ -47,7 +50,7 @@ def main():
             elif status == 'timeout':
                 timestamp = checks['timestamp_to_request']
             else:
-                pass
+                logging.info('An unexpected status is received')
         except requests.exceptions.ReadTimeout:
             pass
         except requests.exceptions.ConnectionError:
