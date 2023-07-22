@@ -7,7 +7,21 @@ import requests
 import telegram
 
 
-logging.basicConfig(level=logging.INFO)
+class TelegramLogsHandler(logging.Handler):
+    def __init__(self, tg_bot, chat_id):
+        super().__init__()
+        self.chat_id = chat_id
+        self.tg_bot = tg_bot
+
+    def emit(self, record):
+        log_entry = self.format(record)
+        self.tg_bot.send_message(chat_id=self.chat_id, text=log_entry)
+
+
+class BotWithCustomHandler(telegram.Bot):
+    def __init__(self, chat_id, token, *args, **kwargs):
+        super().__init__(token, *args, **kwargs)
+        self.logger.addHandler(TelegramLogsHandler(self, chat_id))
 
 
 def main():
@@ -17,12 +31,12 @@ def main():
     url = env('DEVMAN_URL')
     telegram_token = env('TELEGRAM_TOKEN')
     tg_chat_id = env('TG_CHAT_ID')
-    bot = telegram.Bot(token=telegram_token)
+    bot = BotWithCustomHandler(chat_id=tg_chat_id, token=telegram_token)
+    bot.logger.warning('Long polling of devman API has been started')
     headers = {'Authorization': f'Token {devman_token}'}
     timestamp = None
     while True:
         try:
-            logging.info('The bot is starting...')
             params = {'timestamp': timestamp}
             timestamp = ''
             response = requests.get(url, headers=headers, params=params)
@@ -50,7 +64,7 @@ def main():
             elif status == 'timeout':
                 timestamp = checks['timestamp_to_request']
             else:
-                logging.info('An unexpected status is received')
+                pass
         except requests.exceptions.ReadTimeout:
             pass
         except requests.exceptions.ConnectionError:
