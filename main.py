@@ -59,6 +59,9 @@ def main():
                 bot.send_message(chat_id=tg_chat_id, text=message)
             elif status == 'timeout':
                 timestamp = checks['timestamp_to_request']
+        except requests.exceptions.ReadTimeout:
+            exception_data = traceback.format_exc().splitlines()
+            bot.logger.warning(exception_data[-1])
         except Exception:
             exception_data = traceback.format_exc().splitlines()
             bot.logger.warning(exception_data[-1])
