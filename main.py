@@ -19,12 +19,6 @@ class TelegramLogsHandler(logging.Handler):
         self.tg_bot.send_message(chat_id=self.chat_id, text=log_entry)
 
 
-class BotWithCustomHandler(telegram.Bot):
-    def __init__(self, chat_id, token, *args, **kwargs):
-        super().__init__(token, *args, **kwargs)
-        self.logger.addHandler(TelegramLogsHandler(self, chat_id))
-
-
 def main():
     env = Env()
     env.read_env()
@@ -32,7 +26,8 @@ def main():
     url = env('DEVMAN_URL')
     telegram_token = env('TELEGRAM_TOKEN')
     tg_chat_id = env('TG_CHAT_ID')
-    bot = BotWithCustomHandler(chat_id=tg_chat_id, token=telegram_token)
+    bot = telegram.Bot(token=telegram_token)
+    bot.logger.addHandler(TelegramLogsHandler(bot, tg_chat_id))
     bot.logger.warning('Long polling of devman API has been started')
     headers = {'Authorization': f'Token {devman_token}'}
     timestamp = None
