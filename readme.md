@@ -16,3 +16,13 @@ In order the script to work please create `.env` file and specify these env vars
 5. Create `.env` file in the project root directory and enter the env vars
 6. Run the script 
    * `python3 main.py`
+
+## Running the app in a docker container
+* build image from the Dockerfile
+```shell
+docker build -t <prefered_name> .
+```
+* run the image and mount the `.env` file to it
+```shell
+docker run -it -v $(pwd)/.env:/app/.env <chosen_image_name>
+```
