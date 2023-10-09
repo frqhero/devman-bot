@@ -24,5 +24,5 @@ docker build -t <prefered_name> .
 ```
 * run the image and mount the `.env` file to it
 ```shell
-docker run -d --restart=always -v $(pwd)/.env:/app/.env <chosen_image_name>
+docker run -d --name devman_bot --restart=always -v $(pwd)/.env:/app/.env <chosen_image_name>
 ```
